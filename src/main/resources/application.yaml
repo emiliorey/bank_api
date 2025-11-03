@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: bank-api
+
+  # === H2 DATABASE CONFIGURATION ===
+  datasource:
+    url: "${SPRING_DATASOURCE_URL:jdbc:h2:mem:bankdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
+    driver-class-name: "${SPRING_DRIVER_CLASS_NAME:org.h2.Driver}"
+    username: "${SPRING_DATASOURCE_USERNAME:SA}"
+    password: "${SPRING_DATASOURCE_PASSWORD:}"
+
+  # === JPA & HIBERNATE CONFIGURATION ===
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+
+  # === H2 CONSOLE ===
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # === SQL SCRIPTS ===
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      platform: h2
+
+# === SERVER ===
+server:
+  port: 8080
+
+# === LOGGING ===
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+    type:
+      descriptor:
+        sql: trace
+
+# === ACTUATOR ===
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      # base-path: /actuator  # opcional
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+# === INFO ENDPOINT ===
+info:
+  app:
+    name: bank-api
+    description: CRUD bancos con self-call
+    version: 0.0.1
+
+ms:
+  bank:
+    url: "${MS_BANK_URL:http://localhost:8080}"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      selfService:
+        registerHealthIndicator: true
+        slidingWindowSize: 5              # Número de llamadas evaluadas
+        minimumNumberOfCalls: 3           # Mínimo antes de evaluar el circuito
+        failureRateThreshold: 50          # Porcentaje de fallos para abrir el circuito
+        waitDurationInOpenState: 10s      # Tiempo que permanece abierto antes de intentar reintentos
+        permittedNumberOfCallsInHalfOpenState: 2
+        automaticTransitionFromOpenToHalfOpenEnabled: true
