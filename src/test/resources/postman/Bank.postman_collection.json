@@ -1,0 +1,267 @@
+{
+	"info": {
+		"_postman_id": "f5513be4-e848-44ac-9973-e511d65e8190",
+		"name": "Bank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "902691"
+	},
+	"item": [
+		{
+			"name": "findByUid",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/bank/11111111-aaaa-1111-aaaa",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank",
+						"11111111-aaaa-1111-aaaa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findBySelf",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/bank/self/11111111-aaaa-1111-aaaa-111111111111",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank",
+						"self",
+						"11111111-aaaa-1111-aaaa-111111111111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createNewBank",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Bank of Uruguay\",\n    \"address\": \"uruguay 250\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/bank",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NotFoundException",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/bank/11111111-aaaa-1111-aaaa",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank",
+						"11111111-aaaa-1111-aaaa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createBankDuplicateKeyException",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Bank of Argentina\",\n    \"address\": \"Address\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/bank",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createBankWithoutName",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"Address\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/bank",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createBankWithoutAddress",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Bank of Argentina\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/bank",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HealthDataBaseIndicator",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "prometheus",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/prometheus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"prometheus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "circuitbreaker",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/metrics/resilience4j.circuitbreaker.state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"metrics",
+						"resilience4j.circuitbreaker.state"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
