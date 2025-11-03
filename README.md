@@ -10,14 +10,17 @@
 ### Feign Client
 Configuration to add FeignClient files
 *   **`path = src/main/java/com/bank/bank_api/infraestructure/config/FeignClientsConfig.java`**
+
 Path to add Configurations to external services calls
 *   **`path = src/main/java/com/bank/bank_api/infraestructure/repositories/externalservices/BankFeignClient.java`**
 
 ### Prometheus and Grafana stack for observability
 Start up prometheus and grafana
 *   **`path = src/monitoring/docker-compose.yml`**
+
 Grafana configuration
 *   **`path = src/monitoring/grafana-datasource.yml`**
+
 Prometheus configuration
 *   **`path = src/monitoring/prometheus.yml`**
 
