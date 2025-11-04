@@ -28,6 +28,7 @@ public class BankRepositoryAdapter implements BankRepositoryPort {
     @Override
     public Bank save(Bank bank) {
         log.info("BankRepositoryAdapter.save ...");
+
         if(bankValidators.validate(bank)) {
             throw new DuplicateBankException("Bank name %s and address %s is duplicated".formatted(bank.name(), bank.address()));
         }
@@ -38,6 +39,7 @@ public class BankRepositoryAdapter implements BankRepositoryPort {
     @Override
     public Optional<Bank> findByUid(String uid) {
         log.info("BankRepositoryAdapter.findByUid ...");
+
         final BankEntity bankEntity = bankRepository.findByUid(uid)
                 .orElseThrow(() -> new EntityNotFoundException("Bank %s not found".formatted(uid)));
 
@@ -48,16 +50,24 @@ public class BankRepositoryAdapter implements BankRepositoryPort {
     @Override
     public Bank getByUid(String uid) {
         log.info("BankRepositoryAdapter.getByUid ...");
+
         return bankMapper.toDomain(bankFeignClient.getByUid(uid));
     }
 
     @Override
     public Bank update(String uid, Bank bank) {
-        log.info("BankRepositoryAdapter.save ...");
-        Bank bankToUpdate = new Bank(uid,bank.name(), bank.address());
-        return bankMapper.toDomain(
-                bankRepository.save(
-                        bankMapper.toEntity(bankToUpdate)));
+        log.info("BankRepositoryAdapter.update ...");
+
+        return bankRepository.findByUid(uid)
+                .map(existingEntity -> {
+                    BankEntity entityToUpdate = bankMapper.toEntity(
+                            new Bank(uid, bank.name(), bank.address())
+                    );
+                    entityToUpdate.setId(existingEntity.getId());
+                    return bankRepository.save(entityToUpdate);
+                })
+                .map(bankMapper::toDomain)
+                .orElseThrow(() -> new EntityNotFoundException("Bank %s not found with uid: " .formatted(uid)));
     }
 
 }
