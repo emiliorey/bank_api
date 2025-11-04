@@ -3,9 +3,11 @@ package com.bank.bank_api.infraestructure.handler.error;
 import com.bank.bank_api.domain.exceptions.DuplicateBankException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TransactionRequiredException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.ConnectException;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class HandlerError {
 
     private static final String MESSAGE_ERROR = "Validation error in the submitted data";
@@ -132,10 +137,80 @@ public class HandlerError {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
+    @ExceptionHandler(CallNotPermittedException.class)
+    public ResponseEntity<CircuitBreakerErrorResponse> handleCallNotPermitted(CallNotPermittedException ex) {
+        log.warn("CircuitBreaker abierto: {}", ex.getMessage());
+        String message = "The service is temporarily unavailable. Please try again later.";
+        CircuitBreakerErrorResponse circuitBreakerErrorResponse =
+                new CircuitBreakerErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, message, ex.getCausingCircuitBreakerName());
+        return ResponseEntity
+                .status(circuitBreakerErrorResponse.getStatus())
+                .body(circuitBreakerErrorResponse);
+    }
 
-    public ResponseEntity<ErrorResponse> handleCallNotPermittedException(CallNotPermittedException ex) {
-        ErrorResponse error = new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, "Call isn´t working correctly: " + ex.getMessage());
-        return ResponseEntity.status(error.getStatus()).body(error);
+    @ExceptionHandler(FeignException.NotFound.class)
+    public ResponseEntity<FeignErrorResponse> handleFeignNotFoundException(FeignException.NotFound ex) {
+        String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
+        FeignErrorResponse errorResponse = new FeignErrorResponse(
+                ex.status(),
+                internalMessage,
+                ex.request().httpMethod().name(),
+                ex.request().url()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<FeignErrorResponse> handleFeignBadRequest(FeignException.BadRequest ex) {
+        String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
+        FeignErrorResponse errorResponse = new FeignErrorResponse(
+                ex.status(),
+                internalMessage,
+                ex.request().httpMethod().name(),
+                ex.request().url()
+        );
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(FeignException.Conflict.class)
+    public ResponseEntity<FeignErrorResponse> handleFeignConflict(FeignException.Conflict ex) {
+        String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
+        FeignErrorResponse errorResponse = new FeignErrorResponse(
+                ex.status(),
+                internalMessage,
+                ex.request().httpMethod().name(),
+                ex.request().url()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(FeignException.InternalServerError.class)
+    public ResponseEntity<FeignErrorResponse> handleFeignInternalServerError(FeignException.InternalServerError ex) {
+        String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
+        FeignErrorResponse errorResponse = new FeignErrorResponse(
+                ex.status(),
+                internalMessage,
+                ex.request().httpMethod().name(),
+                ex.request().url()
+        );
+
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<FeignErrorResponse> handleFeignException(FeignException ex) {
+        String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
+        FeignErrorResponse errorResponse = new FeignErrorResponse(
+                ex.status(),
+                internalMessage,
+                ex.request().httpMethod().name(),
+                ex.request().url()
+        );
+
+        return ResponseEntity.status(HttpStatus.valueOf(ex.status())).body(errorResponse);
     }
 
 }
