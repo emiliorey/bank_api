@@ -18,11 +18,14 @@ Path to add Configurations to external services calls
 Start up prometheus and grafana
 *   **`path = src/monitoring/docker-compose.yml`**
 
+Prometheus configuration
+*   **`path = src/monitoring/prometheus.yml`**
+
 Grafana configuration
 *   **`path = src/monitoring/grafana-datasource.yml`**
 
-Prometheus configuration
-*   **`path = src/monitoring/prometheus.yml`**
+Grafana dashboard used
+*   **`https://grafana.com/grafana/dashboards/6756-spring-boot-statistics/`**
 
 ### CircuitBreaker:
 Puntos clave de la configuración circuitBreaker
