@@ -50,9 +50,14 @@ management:
       exposure:
         include: "*"
       # base-path: /actuator  # opcional
-  endpoint:
-    health:
-      show-details: always
+    endpoint:
+      prometheus:
+        enabled: true
+    metrics:
+      tags:
+        application: bank_api
+      health:
+        show-details: always
   health:
     circuitbreakers:
       enabled: true

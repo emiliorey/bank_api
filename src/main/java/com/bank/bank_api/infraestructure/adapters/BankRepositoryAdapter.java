@@ -51,4 +51,13 @@ public class BankRepositoryAdapter implements BankRepositoryPort {
         return bankMapper.toDomain(bankFeignClient.getByUid(uid));
     }
 
+    @Override
+    public Bank update(String uid, Bank bank) {
+        log.info("BankRepositoryAdapter.save ...");
+        Bank bankToUpdate = new Bank(uid,bank.name(), bank.address());
+        return bankMapper.toDomain(
+                bankRepository.save(
+                        bankMapper.toEntity(bankToUpdate)));
+    }
+
 }

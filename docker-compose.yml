@@ -17,7 +17,9 @@ services:
       - SPRING_DATASOURCE_PASSWORD=
       - MS_BANK_URL=http://backend-bank-api:8080
     networks:
-      - shared_network
+      - monitoring
 
 networks:
-  shared_network:
+  monitoring:
+    driver: bridge
+    external: true
