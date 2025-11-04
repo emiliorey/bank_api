@@ -15,14 +15,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/bank/11111111-aaaa-1111-aaaa",
+					"raw": "localhost:8080/bank/11111111-aaaa-1111-aaaa-111111111111",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"bank",
-						"11111111-aaaa-1111-aaaa"
+						"11111111-aaaa-1111-aaaa-111111111111"
 					]
 				}
 			},
@@ -194,6 +194,29 @@
 			"response": []
 		},
 		{
+			"name": "circuitbreakerTestBankApi",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/bank/self/11111111-aaaa-1111-aaaa-111111111111",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank",
+						"self",
+						"11111111-aaaa-1111-aaaa-111111111111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "HealthDataBaseIndicator",
 			"request": {
 				"auth": {
@@ -258,6 +281,37 @@
 						"actuator",
 						"metrics",
 						"resilience4j.circuitbreaker.state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateBank",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Bank of Uruguay\",\n    \"address\": \"uruguay modificado\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/bank/11111111-aaaa-1111-aaaa-111111111111",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bank",
+						"11111111-aaaa-1111-aaaa-111111111111"
 					]
 				}
 			},
