@@ -19,7 +19,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml # Optional: for pre-configuring data sources
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources # Optional: for pre-configuring data sources
     networks:
       - monitoring
 
