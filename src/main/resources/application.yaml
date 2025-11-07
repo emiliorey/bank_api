@@ -84,3 +84,16 @@ resilience4j:
         waitDurationInOpenState: 10s      # Tiempo que permanece abierto antes de intentar reintentos
         permittedNumberOfCallsInHalfOpenState: 2
         automaticTransitionFromOpenToHalfOpenEnabled: true
+  ratelimiter:
+    instances:
+      selfServiceRateLimit:
+        limit-for-period: 2
+        limit-refresh-period: 10s
+        timeout-duration: 1500ms
+  retry:
+    instances:
+      selfServiceRetry:
+        max-attempts: 2
+        wait-duration: 1s
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2

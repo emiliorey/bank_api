@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TransactionRequiredException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.ConnectException;
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -124,7 +123,7 @@ public class HandlerError {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 
         ValidationErrorResponse errorResponse = new ValidationErrorResponse(HttpStatus.BAD_REQUEST, MESSAGE_ERROR);
 
@@ -138,7 +137,7 @@ public class HandlerError {
     }
 
     @ExceptionHandler(CallNotPermittedException.class)
-    public ResponseEntity<CircuitBreakerErrorResponse> handleCallNotPermitted(CallNotPermittedException ex) {
+    public ResponseEntity<ErrorResponse> handleCallNotPermitted(CallNotPermittedException ex) {
         log.warn("CircuitBreaker abierto: {}", ex.getMessage());
         String message = "The service is temporarily unavailable. Please try again later.";
         CircuitBreakerErrorResponse circuitBreakerErrorResponse =
@@ -148,8 +147,19 @@ public class HandlerError {
                 .body(circuitBreakerErrorResponse);
     }
 
+    @ExceptionHandler(RequestNotPermitted.class)
+    public ResponseEntity<ErrorResponse> handleCallNotPermitted(RequestNotPermitted ex) {
+        log.warn("RateLimiter abierto: {}", ex.getMessage());
+        String message = "The service is temporarily unavailable. Please try again later.";
+        RateLimiterErrorResponse rateLimiterErrorResponse =
+                new RateLimiterErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, message, ex.getMessage());
+        return ResponseEntity
+                .status(rateLimiterErrorResponse.getStatus())
+                .body(rateLimiterErrorResponse);
+    }
+
     @ExceptionHandler(FeignException.NotFound.class)
-    public ResponseEntity<FeignErrorResponse> handleFeignNotFoundException(FeignException.NotFound ex) {
+    public ResponseEntity<ErrorResponse> handleFeignNotFoundException(FeignException.NotFound ex) {
         String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
         FeignErrorResponse errorResponse = new FeignErrorResponse(
                 ex.status(),
@@ -162,7 +172,7 @@ public class HandlerError {
     }
 
     @ExceptionHandler(FeignException.BadRequest.class)
-    public ResponseEntity<FeignErrorResponse> handleFeignBadRequest(FeignException.BadRequest ex) {
+    public ResponseEntity<ErrorResponse> handleFeignBadRequest(FeignException.BadRequest ex) {
         String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
         FeignErrorResponse errorResponse = new FeignErrorResponse(
                 ex.status(),
@@ -175,7 +185,7 @@ public class HandlerError {
     }
 
     @ExceptionHandler(FeignException.Conflict.class)
-    public ResponseEntity<FeignErrorResponse> handleFeignConflict(FeignException.Conflict ex) {
+    public ResponseEntity<ErrorResponse> handleFeignConflict(FeignException.Conflict ex) {
         String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
         FeignErrorResponse errorResponse = new FeignErrorResponse(
                 ex.status(),
@@ -188,7 +198,7 @@ public class HandlerError {
     }
 
     @ExceptionHandler(FeignException.InternalServerError.class)
-    public ResponseEntity<FeignErrorResponse> handleFeignInternalServerError(FeignException.InternalServerError ex) {
+    public ResponseEntity<ErrorResponse> handleFeignInternalServerError(FeignException.InternalServerError ex) {
         String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
         FeignErrorResponse errorResponse = new FeignErrorResponse(
                 ex.status(),
@@ -201,7 +211,7 @@ public class HandlerError {
     }
 
     @ExceptionHandler(FeignException.class)
-    public ResponseEntity<FeignErrorResponse> handleFeignException(FeignException ex) {
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException ex) {
         String internalMessage = FeignErrorMessageHelper.extractErrorMessage(ex);
         FeignErrorResponse errorResponse = new FeignErrorResponse(
                 ex.status(),
