@@ -316,6 +316,108 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "dynamic-beans/current-configuration",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/clients/dynamic-beans/current-configuration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clients",
+						"dynamic-beans",
+						"current-configuration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dynamic-beans/default-configuration",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/clients/dynamic-beans/default-configuration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clients",
+						"dynamic-beans",
+						"default-configuration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/external/post/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/external/post/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"external",
+						"post",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/clients/change-url",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/clients/change-url?newUrl=https://jsonplaceholder.typicode.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clients",
+						"change-url"
+					],
+					"query": [
+						{
+							"key": "newUrl",
+							"value": "https://jsonplaceholder.typicode.com"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

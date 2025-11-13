@@ -56,7 +56,7 @@ public class BankController {
     @GetMapping("/self/{uid}")
     @CircuitBreaker(name="selfService")
     @RateLimiter(name = "selfServiceRateLimit")
-    @Retry(name = "selfServiceRetry")
+//    @Retry(name = "selfServiceRetry")
     /**
      *     El time limiter no trabaja a nivel de hilos esta creado para llamadas asincronas por lo tanto esto no se
      *     podría usar aqui!!!

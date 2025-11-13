@@ -129,6 +129,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.github.classgraph</groupId>
+			<artifactId>classgraph</artifactId>
+			<version>4.8.165</version> <!-- Usa la última versión disponible -->
+		</dependency>
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-jackson</artifactId>
+			<version>13.3</version> <!-- o la versión compatible con Spring Cloud que uses -->
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

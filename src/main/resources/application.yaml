@@ -58,6 +58,8 @@ management:
         application: bank_api
       health:
         show-details: always
+      refresh:
+        enabled: true
   health:
     circuitbreakers:
       enabled: true
