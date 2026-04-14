@@ -1,7 +1,6 @@
 package com.bank.bank_api.infraestructure.dynamicfeign;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 

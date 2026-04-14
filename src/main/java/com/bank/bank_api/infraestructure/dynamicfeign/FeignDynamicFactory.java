@@ -1,8 +1,6 @@
 package com.bank.bank_api.infraestructure.dynamicfeign;
 
 import feign.Feign;
-import feign.codec.Decoder;
-import feign.codec.Encoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
