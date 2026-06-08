@@ -12,6 +12,8 @@ public class ClientEntity extends BaseEntity{
     @JoinColumn(nullable = false, name = "branch_id", foreignKey = @ForeignKey(name="FK_client_branch"))
     private BankBranchEntity branch;
     @Column
+    private String name;
+    @Column
     private String du;
     @Column
     private String address;

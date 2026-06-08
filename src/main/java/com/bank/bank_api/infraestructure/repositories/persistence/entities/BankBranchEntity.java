@@ -1,7 +1,11 @@
 package com.bank.bank_api.infraestructure.repositories.persistence.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "bank_branch",
         indexes = {

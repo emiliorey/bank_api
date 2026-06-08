@@ -6,8 +6,6 @@ import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients(clients = {
-        BankFeignClient.class,
-})
+@EnableFeignClients(clients = {BankFeignClient.class})
 public class FeignClientsConfig extends FeignClientsConfiguration {
 }
